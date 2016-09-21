@@ -7,13 +7,19 @@ using namespace std;
 
 int main() {
 	int gameboard[3][3];
-	int whoseturn = 0;
-
+	char whoseturn = 'X';
 	return 0;
-	while
+	
+
+	do {
+		cout << "TicTacToe on C++\n"
+		cout << "\ta\tb\tc"
+		cout << "1\t" << gameboard[0][0] << "\t" << gameboard[1][0] << "\t" << gameboard[2][0]	
+	}
+	while(checkWin(whoseturn, gameboard) == false); 
 }
 
-bool checkWin(int player) {
+bool checkWin(char player, int gameboard[3][3]) {
 	bool playerWon = false
 	if(gameboard[0][0] == player &&
 		gameboard[1][0] == player
