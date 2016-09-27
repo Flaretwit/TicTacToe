@@ -1,46 +1,74 @@
 /* TicTacToe */
-
+//In this game, the loser from the previous game goes first. Outputs the number of wins O has compared to X.
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
 using namespace std;
 
-
 bool checkWin(char player, char(*gameboard)[3]);
 void printBoard(char(*gameboard)[3]);
 int main() {
-	char gameboardthing[3][3];
-	char (*gameboard)[3] = gameboardthing;
-	char move[3];
+	int owins;
+	int xwins;
+	char whowon = ' ';
 	char whoseturn = 'X';
-	for(int i = 0; i < 3; i++) {
-		for(int j = 0; j < 3; j++) {
-			gameboard[i][j] = ' ';	
+	bool keepplaying = true;
+	do{
+		//defines the array and its pointer
+		char gameboardthing[3][3];
+		for(int i = 0; i < 3; i++) {
+			for(int j = 0; j < 3; j++) {
+				gameboardthing[i][j] = ' ';
+			}
 		}
-	}
-	do {
-	cout << "Make your move " << whoseturn << "\n";
-	cin.getline(move, sizeof(move));
-	cout << move[0] << move[1];
-	int row = move[0] - 49;
-	int column = move[1] - 97;
-	cout << row;
-	cout << column;
-	gameboard[column][row] = whoseturn;
+		int turncount = 0;
+		char (*gameboard)[3] = gameboardthing;
+		char move[3];
+		//while loop manages the entire game
+		//Since the while loop only goes on if there is a value of 1,
+		//the arguments in the parentheses must return 0.
+		//The or statement guarantees that both must be zero in order for the
+		//two arguments together to return 0.
+			while(!(checkWin(whoseturn, gameboard) || turncount == 9)) {
+			//checks for a win
+			printBoard(gameboard);
+			cout << "Make your move " << whoseturn << "\n";
+			//gets input
+			cin.getline(move, sizeof(move));
+			int row = move[0] - 49;
+			int column = move[1] - 97;
 
-	if(whoseturn == 'X') {
-		whoseturn = 'O';
-	} else {
-		whoseturn = 'X';
-	}
-	printBoard(gameboard);
-
-
-	} while(checkWin(whoseturn, gameboard) == false);
+			//checks if the chosen square is already occupied
+			if(gameboard[column][row] == ' ') {
+			//sets that element in the array to whose turn it is
+				if(turncount % 2 == 0) {
+					whoseturn = 'X';
+				}
+				if(turncount % 2 == 1) {
+					whoseturn = 'O';
+				}
+				gameboard[column][row] = whoseturn;
+			} else {
+				cout << "That space is already filled! \n";
+				turncount--;	
+			}
+			//alternates the variable to change whose turn
+			turncount++;
+			
+			}
+		if(whoseturn == 'X') {
+			
+		}
+	}while(keepplaying);
+	
 	return 0;	
 }
 
-
+bool checkTie(char(*gameboard)) {
+	if(!checkWin('X', gameboard) && checkWin('O', gameboard))
+}
+//checks for a win by checking all the columns, rows and diagonals for a player
+//returns a boolean 
 bool checkWin(char player, char(*gameboard)[3]) {
 	bool playerWon = false;
 	if(gameboard[0][0] == player &&
