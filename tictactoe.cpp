@@ -3,16 +3,18 @@
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
+#include <string.h>
 using namespace std;
-
+bool checkTie(char(*gameboard)[3]);
 bool checkWin(char player, char(*gameboard)[3]);
 void printBoard(char(*gameboard)[3]);
 int main() {
 	int owins;
 	int xwins;
 	char whowon = ' ';
-	char whoseturn = 'X';
+	char whoseturn = 'O';
 	bool keepplaying = true;
+	char decision[2];
 	do{
 		//defines the array and its pointer
 		char gameboardthing[3][3];
@@ -56,16 +58,41 @@ int main() {
 			turncount++;
 			
 			}
-		if(whoseturn == 'X') {
-			
+		//based on whose turn it was when the game ended
+		if(checkTie(gameboard)) {
+			cout << "Tie!";
 		}
+		else {
+			if(whoseturn == 'X') {
+				xwins++;
+				whoseturn = 'O';
+				cout << "X wins!\n";
+				cout << "X has: " << xwins << "\n";	
+			} else if(whoseturn == 'O') {
+				owins++;
+				whoseturn = 'X';
+				cout << "O wins!\n";
+				cout << "O has: " << owins << "\n";
+			}
+		}
+		
+		cout << "Do you want to continue playing? (y/n)";
+		cin >> decision;
+		if(!strcmp(decision, "n")) {
+			keepplaying = false;		
+		}
+
+		
 	}while(keepplaying);
 	
 	return 0;	
 }
 
-bool checkTie(char(*gameboard)) {
-	if(!checkWin('X', gameboard) && checkWin('O', gameboard))
+bool checkTie(char(*gameboard)[3]) {
+	if(!checkWin('X', gameboard) && !checkWin('O', gameboard)) {
+		return true;
+	}
+	return false;
 }
 //checks for a win by checking all the columns, rows and diagonals for a player
 //returns a boolean 
