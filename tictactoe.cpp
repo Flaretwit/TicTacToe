@@ -4,148 +4,91 @@
 #include <ctime>
 #include <cstdlib>
 #include <string.h>
+
+#define TIE = 1;
+#define OPLAYER = 2;
+#define XPLAYER = 3;
 using namespace std;
+struct Move;
 bool checkTie(char(*gameboard)[3]);
 bool checkWin(char player, char(*gameboard)[3]);
 void printBoard(char(*gameboard)[3]);
+
+//a better main function
+
 int main() {
-	int owins;
-	int xwins;
-	char whowon = ' ';
-	char whoseturn = 'O';
-	bool keepplaying = true;
-	char decision[2];
-	do{
-		//defines the array and its pointer
-		char gameboardthing[3][3];
-		for(int i = 0; i < 3; i++) {
-			for(int j = 0; j < 3; j++) {
-				gameboardthing[i][j] = ' ';
-			}
-		}
-		int turncount = 0;
-		char (*gameboard)[3] = gameboardthing;
-		char move[3];
-		//while loop manages the entire game
-		//Since the while loop only goes on if there is a value of 1,
-		//the arguments in the parentheses must return 0.
-		//The or statement guarantees that both must be zero in order for the
-		//two arguments together to return 0.
-			while(!(checkWin(whoseturn, gameboard) || turncount == 9)) {
-			//checks for a win
-			printBoard(gameboard);
-			cout << "Make your move " << whoseturn << "\n";
-			//gets input
-			cin.getline(move, sizeof(move));
-			int row = move[0] - 49;
-			int column = move[1] - 97;
-
-			//checks if the chosen square is already occupied
-			if(gameboard[column][row] == ' ') {
-			//sets that element in the array to whose turn it is
-				if(turncount % 2 == 0) {
-					whoseturn = 'X';
-				}
-				if(turncount % 2 == 1) {
-					whoseturn = 'O';
-				}
-				gameboard[column][row] = whoseturn;
-			} else {
-				cout << "That space is already filled! \n";
-				turncount--;	
-			}
-			//alternates the variable to change whose turn
-			turncount++;
-			
-			}
-		//based on whose turn it was when the game ended
-		if(checkTie(gameboard)) {
-			cout << "Tie!";
-		}
-		else {
-			if(whoseturn == 'X') {
-				xwins++;
-				whoseturn = 'O';
-				cout << "X wins!\n";
-				cout << "X has: " << xwins << "\n";	
-			} else if(whoseturn == 'O') {
-				owins++;
-				whoseturn = 'X';
-				cout << "O wins!\n";
-				cout << "O has: " << owins << "\n";
-			}
-		}
-		
-		cout << "Do you want to continue playing? (y/n)";
-		cin >> decision;
-		if(!strcmp(decision, "n")) {
-			keepplaying = false;		
-		}
-
-		
-	}while(keepplaying);
+	int owins, xins, turncount;
+	const BLANK = 1;
+	const OMOVE = 2;
+	const XMOVE = 3;
+	Move m;
+	//while loop for multple games
 	
-	return 0;	
+	
+	do {
+	
+	int gameboard[3][3];
+	int** gameboard = gameboard;
+	//sets the gameboard
+	for(int i = 0; i < 3; i++) {
+		for(int j = 0; j < 3; j++) {
+			gameboard = BLANK;
+		}
+
+	}
+
+	while(!checkWin(&gameboard, &m) || turncount == 9) {
+		
+		turncount++;
+	}
+
+	char choice[2];
+	
+	cout << "O wins: " + owins;
+	cout << "X wins: " + xwins;
+	cout << "Do you wish to keep playing? (y/n)";
+	
+	cin.getLine(choice, 1);
+
+	}while(keepplaying);
+
+
 }
 
-bool checkTie(char(*gameboard)[3]) {
-	if(!checkWin('X', gameboard) && !checkWin('O', gameboard)) {
-		return true;
-	}
-	return false;
+
+//from Vikram Kashyap's wonderful and intelligent code
+struct Move(int x, int y, int player) {
+
 }
+
 //checks for a win by checking all the columns, rows and diagonals for a player
 //returns a boolean 
-bool checkWin(char player, char(*gameboard)[3]) {
-	bool playerWon = false;
-	if(gameboard[0][0] == player &&
-		gameboard[1][0] == player &&
-		gameboard[2][0] == player) {
-		playerWon = true;
+int checkWin(Move *m, int(*gameboard)[3])i {
+	int counter[4] = 0;
+	for(int i = 0; i < 3; i++) {
+		//checks for the vertical column
+		if(gameboard[m->x][i] == m->player) counter[0]++;
+		//checks for the horizonal row
+		if(gameboard[i][m->] == m->player) counter[1]++;
+		//checks for topleft to bottomright diagonal
+		if(gameboard[i][i] == m->player) counter[2]++;
+		//checks for bottomleft to topright diagonal
+		if(gameboard[i][2-i] == m->player) counter[3]++;
 	}
-	if(gameboard[0][1] == player &&
-		gameboard[1][1] == player &&
-		gameboard[2][1] == player) {
-		playerWon = true;
+	for(int j = 0; j < 4; j++) {
+		if(counter[j] == 3) return player;
 	}
-	if(gameboard[0][2] == player &&
-		gameboard[1][2] == player &&
-		gameboard[2][2] == player) {
-		playerWon = true;
-	}
-	if(gameboard[0][0] == player &&
-		gameboard[0][1] == player &&
-		gameboard[0][2] == player) {
-		playerWon = true;
-	}
-	if(gameboard[1][0] == player &&
-		gameboard[1][1] == player &&
-		gameboard[1][2] == player) {
-		playerWon = true;
-	}
-	if(gameboard[2][0] == player &&
-		gameboard[2][1] == player &&
-		gameboard[2][2] == player) {
-		playerWon = true;
-	}
-	if(gameboard[0][0] == player &&
-		gameboard[1][1] == player &&
-		gameboard[2][2] == player) {
-		playerWon = true;
-	}	
-	if(gameboard[2][0] == player &&
-		gameboard[1][1] == player &&
-		gameboard[0][2] == player) {
-		playerWon = true;
-	}
-
-	return playerWon;
+	return TIE;
 }
 
-void printBoard(char(*gameboard)[3]) {
-		
-	cout << "\ta\tb\tc\n";
-	cout << "1\t" << gameboard[0][0] << "\t" << gameboard[1][0] << "\t" << gameboard[2][0] << "\n";	
-	cout << "2\t" << gameboard[0][1] << "\t" << gameboard[1][1] << "\t" << gameboard[2][1] << "\n";	
-	cout << "3\t" << gameboard[0][2] << "\t" << gameboard[1][2] << "\t" << gameboard[2][2] << "\n";
+void printBoard(int(*gameboard)[3]) {
+	cout << "\t a\t b\t c\n";
+	for(int i = 0; i < 3; i++) {
+		cout << i + 1 << "\t"; 
+		for(int j = 0; j < 3; j++) {
+			cout << gameboard[i][j] << "\t";
+		}
+		cout << "\n";
+
+	}
 }
