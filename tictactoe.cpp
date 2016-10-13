@@ -37,7 +37,7 @@ int main() {
 	
 	
 	do {
-	cout << "TicTacToe on C!"
+	cout << "TicTacToe on C!";
 	int gameboardthing[3][3];
 	int(*gameboard)[3] = gameboardthing;
 	//sets the gameboard
@@ -51,6 +51,7 @@ int main() {
 		move = getInput();
 		m = getMove(move, turncount % 2);
 		gameboard[m.x][m.y] = m.player;
+		cout << "getting here";
 		printBoard(gameboard);
 		turncount++;
 	}
@@ -125,17 +126,9 @@ void printBoard(int(*gameboard)[3]) {
 }
 //given a character array, returns a Move object.
 Move getMove(char *input, int player) {	
-	char output[3];
-
-	while(1) {
-		cin.getline(output, sizeof(output));
-		if(output[0] < 1 || output[0] > 3 || output[1] > 99 || output[1] < 97) {
-			cout << "Invalid input";
-			cin.clear();
-			cin.ignore(1000. '\n');
-		} else {
-			break;
-		}
+	bool valid = false;
+	while(valid == false){
+	
 	}
 	Move m;
 	m.x= input[0] - 49;
@@ -148,14 +141,22 @@ char* getInput() {
 	char *input = new char[2];
 	bool valid = false;
 
-	while(!valid) {
+	while(valid == false) {
+		cin.getline(input, 2);
 		valid = true;
-		cin >> input;
 	       if(cin.fail()) {
 			cin.clear();
 			cin.ignore(1000, '\n');
-			cout << "Please enter in the format of column, row (1a).";
+			cout << "Please enter in nontroll input.";
 			valid = false;			
+
+	       } else {
+			if(input[0] < 1 && input[0] > 3 && input[1] > 99 && input[1] < 96) {
+				valid = false;
+			cout << "Invalid input";
+			cin.clear();
+			cin.ignore(1000,'\n');
+			}			
 	       }	       
 	}
 
